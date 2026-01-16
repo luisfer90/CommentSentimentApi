@@ -17,6 +17,7 @@ Este proyecto fue desarrollado como **prueba técnica Backend** y está completa
 - Entity Framework Core + Migrations
 - Docker + Docker Compose
 - Swagger (OpenAPI)
+- Pruebas automatizadas (unitarias e integración) para validar la lógica de negocio y los endpoints
 
 ---
 
@@ -268,6 +269,20 @@ la cual clasifica el sentimiento usando reglas simples basadas en palabras clave
 - **Positivo:** `excelente`, `genial`, `fantástico`, `bueno`, `increíble`
 - **Negativo:** `malo`, `terrible`, `problema`, `defecto`, `horrible`
 - **Otro caso:** `neutral`
+
+---
+
+## 🧪 Testing
+
+El proyecto incluye pruebas automatizadas básicas para validar tanto la lógica del análisis de sentimientos como el comportamiento de la API:
+
+- **Pruebas unitarias:** cubren el analizador de sentimientos basado en reglas para garantizar una clasificación correcta según las palabras clave.
+- **Pruebas de integración:** verifican el flujo completo de POST y GET con la base de datos mediante un proveedor en memoria.
+
+Las pruebas se pueden ejecutar con:
+```bash
+dotnet test
+```
 
 ---
 
