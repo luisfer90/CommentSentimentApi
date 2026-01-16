@@ -151,7 +151,7 @@ http://localhost:5000/swagger
 ---
 
 ## 🔌 Endpoints disponibles
-
+Puerto default: 5000 (http)
 ### 1️⃣ Crear comentario
 
 **POST** `/api/comments`
