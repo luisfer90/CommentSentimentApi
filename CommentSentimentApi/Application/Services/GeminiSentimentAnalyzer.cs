@@ -60,7 +60,10 @@ Texto: {text}
         var response = _httpClient.SendAsync(request).Result;
 
         if (!response.IsSuccessStatusCode)
-            return "neutral";
+        {
+            throw new Exception("Error calling Gemini API");
+        }
+
 
         var json = response.Content.ReadAsStringAsync().Result;
         using var doc = JsonDocument.Parse(json);

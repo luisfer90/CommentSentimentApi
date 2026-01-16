@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using CommentSentimentApi.Infrastructure.Data;
+﻿using CommentSentimentApi.Application.DTOs;
 using CommentSentimentApi.Application.Interfaces;
+using CommentSentimentApi.Application.Services;
 using CommentSentimentApi.Domain.Entities;
-using CommentSentimentApi.Application.DTOs;
+using CommentSentimentApi.Infrastructure.Data;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CommentSentimentApi.Controllers
 {
@@ -13,6 +14,8 @@ namespace CommentSentimentApi.Controllers
     {
         private readonly AppDbContext _context;
         private readonly ISentimentAnalyzer _sentimentAnalyzer;
+        private readonly RuleBasedSentimentAnalyzer _fallbackAnalyzer;
+
 
         public CommentsController(
             AppDbContext context,
@@ -20,6 +23,7 @@ namespace CommentSentimentApi.Controllers
         {
             _context = context;
             _sentimentAnalyzer = sentimentAnalyzer;
+            _fallbackAnalyzer = new RuleBasedSentimentAnalyzer();
         }
 
         // POST: api/comments
@@ -29,7 +33,18 @@ namespace CommentSentimentApi.Controllers
             if (string.IsNullOrWhiteSpace(request.Comment_Text))
                 return BadRequest("El comentario no puede estar vacío.");
 
-            var sentiment = _sentimentAnalyzer.Analyze(request.Comment_Text);
+            string sentiment;
+
+            try
+            {
+                sentiment = _sentimentAnalyzer.Analyze(request.Comment_Text);
+            }
+            catch
+            {
+                // Fallback to rule-based sentiment analysis
+                sentiment = _fallbackAnalyzer.Analyze(request.Comment_Text);
+            }
+
 
             var comment = new Comment
             {
