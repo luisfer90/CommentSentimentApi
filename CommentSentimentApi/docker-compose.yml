@@ -9,6 +9,7 @@ services:
       - db
     environment:
       - ConnectionStrings__DefaultConnection=Server=db,1433;Database=SentimentDb;User Id=sa;Password=YourStrong@Password;TrustServerCertificate=True
+      - Gemini_ApiKey=${GEMINI_API_KEY}
     restart: always
 
   db:
