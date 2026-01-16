@@ -309,10 +309,8 @@ dotnet test
 
 ## 👤 Autor
 
-**Luis Fernando**  
+**Luis Fernando Félix Mata**  
 Backend Developer
 
 ---
-
-✅ Proyecto listo para evaluación técnica
 
