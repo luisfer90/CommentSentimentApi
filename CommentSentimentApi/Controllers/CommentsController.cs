@@ -16,7 +16,8 @@ namespace CommentSentimentApi.Controllers
         private readonly ISentimentAnalyzer _sentimentAnalyzer;
         private readonly RuleBasedSentimentAnalyzer _fallbackAnalyzer;
 
-
+        // Main sentiment analyzer is injected via DI (Gemini)
+        // Rule-based analyzer is used as a fallback when Gemini fails
         public CommentsController(
             AppDbContext context,
             ISentimentAnalyzer sentimentAnalyzer)
@@ -26,6 +27,7 @@ namespace CommentSentimentApi.Controllers
             _fallbackAnalyzer = new RuleBasedSentimentAnalyzer();
         }
 
+        // Creates a new comment and analyzes its sentiment
         // POST: api/comments
         [HttpPost]
         public async Task<IActionResult> CreateComment([FromBody] CreateCommentRequest request)
@@ -37,6 +39,7 @@ namespace CommentSentimentApi.Controllers
 
             try
             {
+                // Try sentiment analysis using Gemini API
                 sentiment = _sentimentAnalyzer.Analyze(request.Comment_Text);
             }
             catch
@@ -61,6 +64,7 @@ namespace CommentSentimentApi.Controllers
             return Ok(comment);
         }
 
+        // Retrieves comments with optional filters
         // GET: api/comments
         [HttpGet]
         public async Task<IActionResult> GetComments(
@@ -97,6 +101,7 @@ namespace CommentSentimentApi.Controllers
             return Ok(comments);
         }
 
+        // Returns a summary of comments grouped by sentiment
         // GET: api/sentiment-summary
         [HttpGet("/api/sentiment-summary")]
         public async Task<IActionResult> GetSentimentSummary()
