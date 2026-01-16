@@ -60,12 +60,12 @@ var app = builder.Build();
 // --------------------------------------------------
 // Configure the HTTP request pipeline
 // --------------------------------------------------
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    // Enable Swagger UI only in development
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "CommentSentiment API v1");
+});
+
 
 // Enforce HTTPS redirection
 app.UseHttpsRedirection();
@@ -75,6 +75,13 @@ app.UseAuthorization();
 
 // Map controller routes
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
+
 
 // Start the application
 app.Run();
